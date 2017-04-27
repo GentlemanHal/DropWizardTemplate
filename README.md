@@ -25,7 +25,7 @@ To import into IntelliJ run `Import Project`, select the `build.gradle` file the
 ### Running locally
 
 To run a dev server locally use `./gradlew run`, this will start the server using the configuration in
-`./build/config/app_config.yml`.
+`src/config/app_config.yml`.
 
 ### Debugging in IDE
 
