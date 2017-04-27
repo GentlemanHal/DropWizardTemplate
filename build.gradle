@@ -10,7 +10,6 @@ targetCompatibility = 1.8
 project.ext {
     release = System.getenv('GREETING_SERVICE_VERSION_NUMBER') ?: 'unknown'
     commitHash = System.getenv('GREETING_SERVICE_COMMIT_HASH') ?: 'unknown'
-    configPath = "${rootProject.projectDir}/config/"
     dropwizardVersion = '1.1.0'
 }
 
@@ -73,20 +72,10 @@ applicationDefaultJvmArgs = ["-agentlib:jdwp=transport=dt_socket,server=y,suspen
 
 mainClassName = "uk.co.example.greeting.GreetingService"
 
-task writeConfig(type: Copy) {
-    from 'config'
-    into "${buildDir}/config"
-    include 'app_config.yml.template'
-    rename { file -> 'app_config.yml' }
-    expand(env: System.env)
-}
-
 run {
-    args 'server', "${buildDir}/config/app_config.yml"
+    args 'server', "${sourceSets.main.resources.srcDirs[0]}/app_config.yml"
     systemProperties = System.getProperties()
 }
-
-run.dependsOn writeConfig
 
 shadowJar {
     doFirst {

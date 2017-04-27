@@ -4,7 +4,7 @@ server:
   adminContextPath: /admin
   connector:
     type: http
-    port: ${env.GREETING_SERVICE_PORT}
+    port: ${GREETING_SERVICE_PORT:-8080}
   requestLog:
     appenders:
       - type: console
