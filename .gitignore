@@ -8,9 +8,5 @@
 build
 .gradle
 
-# logs
-/log/
-!/log/.gitkeep
-
 # OSX
 *.DS_Store

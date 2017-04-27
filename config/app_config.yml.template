@@ -1,28 +1,15 @@
 server:
   type: simple
-  applicationContextPath: /api/image
+  applicationContextPath: /api
   adminContextPath: /admin
   connector:
     type: http
-    port: ${env.IMAGE_SERVICE_PORT}
+    port: ${env.GREETING_SERVICE_PORT}
   requestLog:
     appenders:
-      - type: file
-        timeZone: UTC
-        currentLogFilename: ${env.IMAGE_SERVICE_REQUEST_LOG_PATH}
-        threshold: ALL
-        archive: true
-        archivedLogFilenamePattern: ${env.IMAGE_SERVICE_REQUEST_LOG_PATH}.%d.gz
-        archivedFileCount: 14
+      - type: console
 
 logging:
   appenders:
     - type: console
-      logFormat: "%-5level [%d] %X{correlationId:-0} %logger{5}: %msg%n"
-    - type: file
-      currentLogFilename: ${env.IMAGE_SERVICE_APP_LOG_PATH}
-      threshold: ALL
-      archive: true
-      archivedLogFilenamePattern: ${env.IMAGE_SERVICE_APP_LOG_PATH}.%d.gz
-      archivedFileCount: 14
       logFormat: "%-5level [%d] %X{correlationId:-0} %logger{5}: %msg%n"
