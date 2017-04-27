@@ -1,4 +1,4 @@
-package uk.co.example.greeting;
+package uk.co.example.greeting.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

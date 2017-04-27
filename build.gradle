@@ -8,7 +8,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 project.ext {
-    release = System.getenv('GREETING_SERVICE_VERSION_NUMBER') ?: 'unknown'
+    versionNumber = System.getenv('GREETING_SERVICE_VERSION_NUMBER') ?: '0.0.0'
     commitHash = System.getenv('GREETING_SERVICE_COMMIT_HASH') ?: 'unknown'
     dropwizardVersion = '1.1.0'
 }
@@ -58,6 +58,7 @@ dependencies {
     compile 'io.dropwizard.metrics:metrics-core:3.2.2'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.8.8'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.8'
+    compile 'com.jcabi:jcabi-manifests:1.1'
     compile 'com.amazonaws:aws-java-sdk:1.11.123'
 
     testCompile 'junit:junit:4.12'
@@ -81,8 +82,8 @@ shadowJar {
     doFirst {
         manifest {
             attributes([
-                    'commitHash': project.ext.commitHash,
-                    'buildLabel': project.ext.release
+                    'Commit-Hash'   : project.ext.commitHash,
+                    'Version-Number': project.ext.versionNumber
             ])
         }
     }

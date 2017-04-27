@@ -1,4 +1,4 @@
-package uk.co.example.greeting;
+package uk.co.example.greeting.healthchecks;
 
 import com.codahale.metrics.health.HealthCheck;
 

@@ -10,6 +10,9 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.co.example.greeting.admin.VersionServlet;
+import uk.co.example.greeting.api.HelloWorldResource;
+import uk.co.example.greeting.healthchecks.ExampleHealthCheck;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
@@ -25,6 +28,10 @@ public class GreetingService extends Application<GreetingServiceConfiguration> {
             .configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    public static void main(final String[] args) throws Exception {
+        new GreetingService().run(args);
+    }
+
     @Override
     public void initialize(Bootstrap<GreetingServiceConfiguration> bootstrap) {
         decorateObjectMapper(bootstrap.getObjectMapper());
@@ -37,9 +44,6 @@ public class GreetingService extends Application<GreetingServiceConfiguration> {
 
         environment.jersey().register(new HelloWorldResource());
         environment.healthChecks().register("example", new ExampleHealthCheck());
-    }
-
-    public static void main(final String[] args) throws Exception {
-        new GreetingService().run(args);
+        environment.admin().addServlet("version", new VersionServlet()).addMapping("/version");
     }
 }
