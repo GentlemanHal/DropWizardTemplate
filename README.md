@@ -18,7 +18,7 @@ This project requires at least Java 8.
 
 This project includes the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) which will
 automatically downloaded and install the correct version of Gradle. Gradle will automatically download all project
-dependencies on demand, so there is no specific commands to run.
+dependencies on demand, so there are no specific commands to run.
 
 To import into IntelliJ run `Import Project`, select the `build.gradle` file then check `autoimport`.
 
@@ -30,7 +30,7 @@ To run a dev server locally use `./gradlew run`, this will start the server usin
 ### Debugging in IDE
 
 To run the project in debug mode from Intellij, you need to edit the run configuration and add the following program arguments:
-"server build/config/app_config.yml"
+`server src/config/app_config.yml`
 
 ### Testing
 
