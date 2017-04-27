@@ -1,0 +1,121 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "1.2.4"
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+project.ext {
+    release = System.getenv()['VERSION_NUMBER'] ?: 0
+    commitHash = System.getenv()['COMMIT_HASH'] ?: 'unknown'
+    configPath = "$rootProject.projectDir/config/"
+    dropwizardVersion = '1.1.0'
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+sourceSets {
+    testUtils {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/test/utils')
+        }
+    }
+    unitTest {
+        java {
+            compileClasspath += main.output + test.output + testUtils.output
+            runtimeClasspath += main.output + test.output + testUtils.output
+            srcDir file('src/test/unit')
+        }
+    }
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output + testUtils.output
+            runtimeClasspath += main.output + test.output + testUtils.output
+            srcDir file('src/test/integration')
+        }
+        resources.srcDir file('src/test/resources')
+    }
+}
+
+configurations {
+    testUtilsCompile.extendsFrom testCompile
+    testUtilsRuntime.extendsFrom testRuntime
+    unitTestCompile.extendsFrom testCompile
+    unitTestRuntime.extendsFrom testRuntime
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+dependencies {
+    compile 'io.dropwizard:dropwizard-core:' + project.ext.dropwizardVersion
+    compile 'io.dropwizard:dropwizard-client:' + project.ext.dropwizardVersion
+    compile 'io.dropwizard.metrics:metrics-core:3.2.2'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.8.8'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.8'
+    compile 'com.amazonaws:aws-java-sdk:1.11.123'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:3.6.2'
+    testCompile 'org.mockito:mockito-core:2.7.22'
+    testCompile 'io.dropwizard:dropwizard-testing:' + project.ext.dropwizardVersion
+    testCompile 'com.jayway.jsonpath:json-path:2.2.0'
+    testCompile 'com.github.tomakehurst:wiremock:2.6.0'
+}
+
+applicationDefaultJvmArgs = ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5006"]
+
+mainClassName = "uk.co.motability.image.ImageService"
+
+task writeConfig(type: Copy) {
+    from 'config'
+    into "${buildDir}/config"
+    include 'app_config.yml.template'
+    rename { file -> 'app_config.yml' }
+    expand(env: System.env)
+}
+
+run {
+    args 'server', "${buildDir}/config/app_config.yml"
+    systemProperties = System.getProperties()
+}
+
+run.dependsOn writeConfig
+
+shadowJar {
+    doFirst {
+        manifest {
+            attributes([
+                    'commitHash': project.ext.commitHash,
+                    'buildLabel': project.ext.release
+            ])
+        }
+    }
+    mergeServiceFiles()
+}
+
+task unitTest(type: Test) {
+    testClassesDir = sourceSets.unitTest.output.classesDir
+    classpath = sourceSets.unitTest.runtimeClasspath
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+}
+
+tasks.withType(Test) {
+    reports.html.destination = file("${reporting.baseDir}/${name}")
+}
+
+test.dependsOn unitTest
+test.dependsOn integrationTest
+integrationTest.mustRunAfter unitTest
