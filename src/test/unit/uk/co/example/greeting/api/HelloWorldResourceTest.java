@@ -28,7 +28,7 @@ public class HelloWorldResourceTest {
 
     private String sayHello() {
         return resources.client()
-            .target("/greeting")
+            .target("/hello")
             .request(APPLICATION_JSON_TYPE)
             .get(String.class);
     }
