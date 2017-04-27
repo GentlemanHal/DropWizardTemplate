@@ -33,6 +33,7 @@ public class GreetingService extends Application<GreetingServiceConfiguration> {
         logger.info("Initialising the image service...");
 
         environment.jersey().register(new HelloWorldResource());
+        environment.healthChecks().register("example", new ExampleHealthCheck());
     }
 
     public static void main(final String[] args) throws Exception {

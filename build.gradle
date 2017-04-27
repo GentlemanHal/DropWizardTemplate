@@ -1,16 +1,15 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "1.2.4"
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
 }
-
-apply plugin: 'java'
-apply plugin: 'application'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 project.ext {
-    release = System.getenv()['VERSION_NUMBER'] ?: 0
-    commitHash = System.getenv()['COMMIT_HASH'] ?: 'unknown'
+    release = System.getenv('GREETING_SERVICE_VERSION_NUMBER') ?: 'unknown'
+    commitHash = System.getenv('GREETING_SERVICE_COMMIT_HASH') ?: 'unknown'
     configPath = "${rootProject.projectDir}/config/"
     dropwizardVersion = '1.1.0'
 }
