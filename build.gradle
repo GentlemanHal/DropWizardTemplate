@@ -9,7 +9,7 @@ targetCompatibility = 1.8
 
 project.ext {
     versionNumber = System.getenv('GREETING_SERVICE_VERSION_NUMBER') ?: '0.0.0'
-    commitHash = System.getenv('GREETING_SERVICE_COMMIT_HASH') ?: 'unknown'
+    commitHash = System.getenv('GREETING_SERVICE_COMMIT_HASH') ?: 'local'
     dropwizardVersion = '1.1.0'
 }
 
@@ -74,7 +74,7 @@ applicationDefaultJvmArgs = ["-agentlib:jdwp=transport=dt_socket,server=y,suspen
 mainClassName = "uk.co.example.greeting.GreetingService"
 
 run {
-    args 'server', "${sourceSets.main.resources.srcDirs[0]}/app_config.yml"
+    args 'server', 'src/config/app_config.yml'
     systemProperties = System.getProperties()
 }
 
