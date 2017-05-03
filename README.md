@@ -20,8 +20,6 @@ This project includes the [Gradle Wrapper](https://docs.gradle.org/current/userg
 automatically downloaded and install the correct version of Gradle. Gradle will automatically download all project
 dependencies on demand, so there are no specific commands to run.
 
-To import into IntelliJ run `Import Project`, select the `build.gradle` file then check `autoimport`.
-
 ### Running locally
 
 To run a dev server locally use `./gradlew run`, this will start the server using the configuration in
