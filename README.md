@@ -1,6 +1,6 @@
-# Greeting Service
+# TODO: Service Name
 
-Example DropWizard service with some extra configuration.
+TODO: Add a simple description of the service.
 
 ## Prerequisites
 
