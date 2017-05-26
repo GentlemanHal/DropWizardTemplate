@@ -1,108 +1,132 @@
 plugins {
-    id 'java'
-    id 'application'
-    id 'com.github.johnrengelman.shadow' version '1.2.4'
+  id 'java'
+  id 'application'
+  id 'com.github.johnrengelman.shadow' version '1.2.4'
+  id 'com.palantir.docker' version '0.13.0'
 }
+
+description = 'Add a simple description of the service.'          // TODO: replace with correct description
+version = System.getenv('SERVICE_NAME_VERSION_NUMBER') ?: '0.0.0' // TODO: replace with correct environment variable
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-project.ext {
-    versionNumber = System.getenv('GREETING_SERVICE_VERSION_NUMBER') ?: '0.0.0'
-    commitHash = System.getenv('GREETING_SERVICE_COMMIT_HASH') ?: 'local'
-    dropwizardVersion = '1.1.0'
+ext {
+  projectName = 'service-name'                                      // TODO: replace with the correct service name
+  projectPort = System.getenv('SERVICE_NAME_PORT') ?: '8080'        // TODO: replace with correct environment variable
+  commitHash = System.getenv('SERVICE_NAME_COMMIT_HASH') ?: 'local' // TODO: replace with correct environment variable
+  dropwizardVersion = '1.1.0'
 }
 
 repositories {
-    jcenter()
-    mavenCentral()
+  jcenter()
+  mavenCentral()
 }
 
 sourceSets {
-    testUtils {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/test/utils')
-        }
+  testUtils {
+    java {
+      compileClasspath += main.output + test.output
+      runtimeClasspath += main.output + test.output
+      srcDir file('src/test/utils')
     }
-    unitTest {
-        java {
-            compileClasspath += main.output + test.output + testUtils.output
-            runtimeClasspath += main.output + test.output + testUtils.output
-            srcDir file('src/test/unit')
-        }
+  }
+  unitTest {
+    java {
+      compileClasspath += main.output + test.output + testUtils.output
+      runtimeClasspath += main.output + test.output + testUtils.output
+      srcDir file('src/test/unit')
     }
-    integrationTest {
-        java {
-            compileClasspath += main.output + test.output + testUtils.output
-            runtimeClasspath += main.output + test.output + testUtils.output
-            srcDir file('src/test/integration')
-        }
-        resources.srcDir file('src/test/resources')
+  }
+  integrationTest {
+    java {
+      compileClasspath += main.output + test.output + testUtils.output
+      runtimeClasspath += main.output + test.output + testUtils.output
+      srcDir file('src/test/integration')
     }
+    resources.srcDir file('src/test/resources')
+  }
 }
 
 configurations {
-    testUtilsCompile.extendsFrom testCompile
-    testUtilsRuntime.extendsFrom testRuntime
-    unitTestCompile.extendsFrom testCompile
-    unitTestRuntime.extendsFrom testRuntime
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
+  testUtilsCompile.extendsFrom testCompile
+  testUtilsRuntime.extendsFrom testRuntime
+  unitTestCompile.extendsFrom testCompile
+  unitTestRuntime.extendsFrom testRuntime
+  integrationTestCompile.extendsFrom testCompile
+  integrationTestRuntime.extendsFrom testRuntime
 }
 
 dependencies {
-    compile 'io.dropwizard:dropwizard-core:' + project.ext.dropwizardVersion
-    compile 'io.dropwizard:dropwizard-client:' + project.ext.dropwizardVersion
-    compile 'io.dropwizard.metrics:metrics-core:3.2.2'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.8.8'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.8'
-    compile 'com.jcabi:jcabi-manifests:1.1'
-    compile 'com.amazonaws:aws-java-sdk:1.11.123'
+  compile 'io.dropwizard:dropwizard-core:' + dropwizardVersion
+  compile 'io.dropwizard:dropwizard-client:' + dropwizardVersion
+  compile 'io.dropwizard.metrics:metrics-core:3.2.2'
+  compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.8.8'
+  compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.8'
+  compile 'com.jcabi:jcabi-manifests:1.1'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:3.6.2'
-    testCompile 'org.mockito:mockito-core:2.7.22'
-    testCompile 'io.dropwizard:dropwizard-testing:' + project.ext.dropwizardVersion
-    testCompile 'com.jayway.jsonpath:json-path:2.2.0'
-    testCompile 'com.github.tomakehurst:wiremock:2.6.0'
+  testCompile 'junit:junit:4.12'
+  testCompile 'org.assertj:assertj-core:3.6.2'
+  testCompile 'org.mockito:mockito-core:2.7.22'
+  testCompile 'io.dropwizard:dropwizard-testing:' + dropwizardVersion
+  testCompile 'com.jayway.jsonpath:json-path:2.2.0'
+  testCompile 'com.github.tomakehurst:wiremock:2.6.0'
 }
 
 applicationDefaultJvmArgs = ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5006"]
 
-mainClassName = "uk.co.example.greeting.GreetingService"
+mainClassName = "uk.co.example.serviceName.ServiceName" // TODO: replace with the correct main class
 
 run {
-    args 'server', 'src/config/app_config.yml'
-    systemProperties = System.getProperties()
+  args 'server', 'src/config/app_config.yml'
+  systemProperties System.getProperties()
+}
+
+jar {
+  manifest {
+    attributes([
+      'Commit-Hash'   : commitHash,
+      'Version-Number': project.version
+    ])
+  }
 }
 
 shadowJar {
-    doFirst {
-        manifest {
-            attributes([
-                    'Commit-Hash'   : project.ext.commitHash,
-                    'Version-Number': project.ext.versionNumber
-            ])
-        }
-    }
-    mergeServiceFiles()
+  baseName projectName
+  mergeServiceFiles()
 }
 
+docker {
+  name "${projectName}:${version}"
+  tags(version, 'latest')
+  files tasks.shadowJar.outputs, 'src/config/app_config.yml'
+  buildArgs([
+    'PORT'       : projectPort,
+    'JAR_NAME'   : "${projectName}-${version}-all.jar",
+    'CONFIG_NAME': 'app_config.yml'
+  ])
+  labels([
+    'description': description,
+    'version'    : version,
+    'commit-hash': commitHash
+  ])
+}
+
+docker.dependsOn shadowJar
+
 task unitTest(type: Test) {
-    testClassesDir = sourceSets.unitTest.output.classesDir
-    classpath = sourceSets.unitTest.runtimeClasspath
+  testClassesDir = sourceSets.unitTest.output.classesDir
+  classpath = sourceSets.unitTest.runtimeClasspath
 }
 
 task integrationTest(type: Test) {
-    testClassesDir = sourceSets.integrationTest.output.classesDir
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    outputs.upToDateWhen { false }
+  testClassesDir = sourceSets.integrationTest.output.classesDir
+  classpath = sourceSets.integrationTest.runtimeClasspath
+  outputs.upToDateWhen { false }
 }
 
 tasks.withType(Test) {
-    reports.html.destination = file("${reporting.baseDir}/${name}")
+  reports.html.destination = file("${reporting.baseDir}/${name}")
 }
 
 test.dependsOn unitTest

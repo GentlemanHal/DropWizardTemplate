@@ -1,4 +1,4 @@
-package uk.co.example.greeting;
+package uk.co.example.serviceName;
 
 import org.slf4j.MDC;
 

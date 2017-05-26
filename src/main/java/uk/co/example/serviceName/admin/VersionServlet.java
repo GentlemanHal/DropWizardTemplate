@@ -1,4 +1,4 @@
-package uk.co.example.greeting.admin;
+package uk.co.example.serviceName.admin;
 
 import com.jcabi.manifests.Manifests;
 import org.slf4j.Logger;

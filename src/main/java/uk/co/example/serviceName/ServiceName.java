@@ -1,4 +1,4 @@
-package uk.co.example.greeting;
+package uk.co.example.serviceName;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -10,14 +10,15 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.co.example.greeting.admin.VersionServlet;
-import uk.co.example.greeting.api.HelloWorldResource;
-import uk.co.example.greeting.healthchecks.ExampleHealthCheck;
+import uk.co.example.serviceName.admin.VersionServlet;
+import uk.co.example.serviceName.api.HelloWorldResource;
+import uk.co.example.serviceName.healthchecks.ExampleHealthCheck;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 
-public class GreetingService extends Application<GreetingServiceConfiguration> {
+// TODO: rename to the correct service name
+public class ServiceName extends Application<ServiceNameConfiguration> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public static ObjectMapper decorateObjectMapper(ObjectMapper objectMapper) {
@@ -29,17 +30,17 @@ public class GreetingService extends Application<GreetingServiceConfiguration> {
     }
 
     public static void main(final String[] args) throws Exception {
-        new GreetingService().run(args);
+        new ServiceName().run(args);
     }
 
     @Override
-    public void initialize(Bootstrap<GreetingServiceConfiguration> bootstrap) {
+    public void initialize(Bootstrap<ServiceNameConfiguration> bootstrap) {
         decorateObjectMapper(bootstrap.getObjectMapper());
         bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
     }
 
     @Override
-    public void run(GreetingServiceConfiguration configuration, Environment environment) throws Exception {
+    public void run(ServiceNameConfiguration configuration, Environment environment) throws Exception {
         logger.info("Initialising the image service...");
 
         environment.jersey().register(new HelloWorldResource());

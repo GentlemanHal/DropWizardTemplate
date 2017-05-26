@@ -1,4 +1,4 @@
-package uk.co.example.greeting.api;
+package uk.co.example.serviceName.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static uk.co.example.greeting.GreetingService.decorateObjectMapper;
+import static uk.co.example.serviceName.ServiceName.decorateObjectMapper;
 
 public class HelloWorldResourceTest {
     private HelloWorldResource resource = new HelloWorldResource();
