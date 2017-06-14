@@ -41,10 +41,19 @@ public class ServiceName extends Application<ServiceNameConfiguration> {
 
     @Override
     public void run(ServiceNameConfiguration configuration, Environment environment) throws Exception {
-        logger.info("Initialising the image service...");
+        logger.info("Initialising the service...");
 
+        // register filters
+        environment.jersey().register(CorsFilter.class);
+        environment.jersey().register(CorrelationIdFilter.class);
+
+        // register api endpoints
         environment.jersey().register(new HelloWorldResource());
+
+        // register health checks
         environment.healthChecks().register("example", new ExampleHealthCheck());
+
+        // register admin endpoints
         environment.admin().addServlet("version", new VersionServlet()).addMapping("/version");
     }
 }
