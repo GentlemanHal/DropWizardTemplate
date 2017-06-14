@@ -54,6 +54,10 @@ To run just the unit tests use `./gradlew unitTest`
 
 To run just the integration tests use `./gradlew integrationTest`
 
+### Checking for dependency updates
+
+To check if any dependencies are out of date use `./gradlew dependencyUpdates` 
+
 ## Releasing
 
 ### Building a jar
