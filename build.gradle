@@ -116,12 +116,12 @@ docker {
 docker.dependsOn shadowJar
 
 task unitTest(type: Test) {
-  testClassesDir = sourceSets.unitTest.output.classesDir
+  testClassesDirs = sourceSets.unitTest.output.classesDirs
   classpath = sourceSets.unitTest.runtimeClasspath
 }
 
 task integrationTest(type: Test) {
-  testClassesDir = sourceSets.integrationTest.output.classesDir
+  testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
   outputs.upToDateWhen { false }
 }
