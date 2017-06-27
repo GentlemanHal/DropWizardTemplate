@@ -6,16 +6,16 @@ plugins {
   id 'com.github.ben-manes.versions' version '0.15.0'
 }
 
-description = 'Add a simple description of the service.'          // TODO: replace with correct description
-version = System.getenv('SERVICE_NAME_VERSION_NUMBER') ?: '0.0.0' // TODO: replace with correct environment variable
+description = 'Add a simple description of the service.' // TODO: replace with correct description
+version = System.getenv('VERSION_NUMBER') ?: '0.0.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext {
-  projectName = 'service-name'                                      // TODO: replace with the correct service name
-  projectPort = System.getenv('SERVICE_NAME_PORT') ?: '8080'        // TODO: replace with correct environment variable
-  commitHash = System.getenv('SERVICE_NAME_COMMIT_HASH') ?: 'local' // TODO: replace with correct environment variable
+  projectName = 'service-name' // TODO: replace with the correct service name
+  projectPort = System.getenv('PORT') ?: '8080'
+  commitHash = System.getenv('COMMIT_HASH') ?: 'local'
   dropwizardVersion = '1.1.1'
 }
 
@@ -80,7 +80,7 @@ mainClassName = "uk.co.example.serviceName.ServiceName" // TODO: replace with th
 
 run {
   args 'server', 'src/config/app_config.yml'
-  systemProperties System.getProperties()
+  environment 'PORT', projectPort
 }
 
 jar {

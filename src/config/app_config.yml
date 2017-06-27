@@ -4,7 +4,7 @@ server:
   adminContextPath: /admin
   connector:
     type: http
-    port: ${SERVICE_NAME_PORT:-8080} # TODO: replace with correct environment variable
+    port: ${PORT}
   requestLog:
     appenders:
       - type: console
